@@ -1,74 +1,50 @@
 import { Request, Response } from "express";
-//import bcrypt from "bcrypt";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import chalk from "chalk";
 
 import {
   newUser,
   searchUser,
   insertToken,
-  Credentials,
+  LogInUser,
 } from "../repositories/authRepository.js";
 
 dotenv.config();
 
 export async function signUp(req: Request, res: Response) {
-    const { email, password }: Credentials = req.body;
+  const { email, password }: LogInUser = req.body;
 
-    //const hashPassword = bcrypt.hashSync(password,10);
-    try {
-      // const userData = await searchUser(email);
-      const userData = await searchUser(1);
+  const hashPassword = bcrypt.hashSync(password,10);
 
-      console.log(userData);
+  const userData = await searchUser(email);
 
-      //await newUser({ email, password: hashPassword });
+  if (userData) throw {status: 409, message: "user exists"};
+  
+  await newUser({ email, password: hashPassword });
 
-      res.status(201).send({message: "User created successfully"});   
-    } catch(e) {
-      res.sendStatus(500);
-      console.log(e)
-    }
+  res.status(201).send({message: "User created successfully"});   
 }
 
-// export async function signIn (req: Request, res: Response){
-//     const { email, password }: credentials = req.body;
+export async function signIn (req: Request, res: Response){
+  const { email, password }: LogInUser = req.body;
 
-//     try{
+  const verifyUser = await searchUser(email);
 
-//         const verifyUser = await searchUser(email);
-//         console.table(verifyUser.rows)
+  if(!verifyUser || !bcrypt.compareSync(password, verifyUser.password))
+    throw {status: 401, message: "invalid data"};      
+    
+  const data = { id: verifyUser.id }
+  const config = { expiresIn: "1m" };
+  const token= jwt.sign(data ,process.env.ENCRYPTPASSWORD, config);
 
-//         if(verifyUser.rows.length === 0){
-//             res.status(401).send({message: "User not found..."});
-//             return;
-//         }
+  await insertToken(verifyUser.id, token);
 
-//         if(!bcrypt.compareSync(password, verifyUser.rows[0].password)){
-//             res.status(401).send({message : "Wrong password..." });
-//             return;
-//         }
-        
+  const user = {
+    id: verifyUser.id,
+    email: verifyUser.email,
+    token: token
+  }
 
-//         const data = {id: verifyUser.rows[0].id, name: verifyUser.rows[0].name}
-
-//         const config = { expiresIn: "1m" };
-//         const token= jwt.sign(data ,process.env.ENCRYPTPASSWORD, config);
-
-//         await insertToken(verifyUser.rows[0].id,token);
-
-//         const user = {
-//             id : verifyUser.rows[0].id,
-//             email : verifyUser.rows[0].email
-//         }
-
-//         const response = { token: token, user: user };
-
-//         res.status(200).send({ message: "Login successful", ...response });
-//     }
-//     catch(e){
-//         console.log(e);
-//         res.sendStatus(500);
-//     }
-// }
+  res.status(200).send({ message: "Login successful", user });    
+}
