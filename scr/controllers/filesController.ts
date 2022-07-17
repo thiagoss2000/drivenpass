@@ -1,7 +1,4 @@
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 import * as filesRepository from "../repositories/filesRepository.js";
 import * as titleService from "../services/filesServices.js";
 
@@ -55,4 +52,82 @@ export async function insertWifi(req: Request, res: Response) {
     await filesRepository.insertWifi(data, userId);
 
     res.status(201).send({message: "WifiPass created successfully"});
+}
+
+
+export async function getCredentialsAll(req: Request, res: Response) {
+    const userId : number = res.locals.user.id;
+
+    const data = await filesRepository.findAllCredential(userId);
+
+    res.send(data);   
+}
+
+export async function getNotesAll(req: Request, res: Response) {
+    const userId : number = res.locals.user.id;
+
+    const data = await filesRepository.findAllNote(userId);
+
+    res.send(data);   
+}
+
+export async function getCardsAll(req: Request, res: Response) {
+    const userId : number = res.locals.user.id;
+
+    const data = await filesRepository.findAllCard(userId);
+
+    res.send(data);   
+}
+
+export async function getWifisAll(req: Request, res: Response) {
+    const userId : number = res.locals.user.id;
+
+    const data = await filesRepository.findAllWifi(userId);
+
+    res.send(data);   
+}
+
+
+export async function getCredentialsId(req: Request, res: Response) {
+    const userId : number = res.locals.user.id;
+    const tableId = req.params.id;
+
+    const data = await filesRepository.findCredentialId(parseInt(tableId), userId);
+
+    if(!data) throw {status: 404, message: "incorrect data"};
+
+    res.send(data);   
+}
+
+export async function getNotesId(req: Request, res: Response) {
+    const userId : number = res.locals.user.id;
+    const tableId = req.params.id;
+
+    const data = await filesRepository.findNoteId(parseInt(tableId), userId);
+
+    if(!data) throw {status: 404, message: "incorrect data"};
+
+    res.send(data);   
+}
+
+export async function getCardsId(req: Request, res: Response) {
+    const userId : number = res.locals.user.id;
+    const tableId = req.params.id;
+
+    const data = await filesRepository.findCardId(parseInt(tableId), userId);
+
+    if(!data) throw {status: 404, message: "incorrect data"};
+
+    res.send(data);   
+}
+
+export async function getWifisId(req: Request, res: Response) {
+    const userId : number = res.locals.user.id;
+    const tableId = req.params.id;
+
+    const data = await filesRepository.findWifiId(parseInt(tableId), userId);
+
+    if(!data) throw {status: 404, message: "incorrect data"};
+
+    res.send(data);   
 }

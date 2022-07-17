@@ -34,6 +34,7 @@ export async function findAllCredential(userId: number) {
 }
 
 export async function findCredentialId(CredentialId: number, userId: number) {
+    return ""
 }
 
 
@@ -46,6 +47,7 @@ export async function findAllNote(userId: number) {
 }
 
 export async function findNoteId(CredentialId: number, userId: number) {
+    return ""
 }
 
 
@@ -58,6 +60,7 @@ export async function findAllCard(userId: number) {
 }
 
 export async function findCardId(CredentialId: number, userId: number) {
+    return ""
 }
 
 
@@ -69,4 +72,5 @@ export async function findAllWifi(userId: number) {
 }
 
 export async function findWifiId(CredentialId: number, userId: number) {
+    return ""
 }
