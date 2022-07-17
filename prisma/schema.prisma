@@ -7,16 +7,62 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model users {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  password String
+model Users {
+  id          Int           @id @default(autoincrement())
+  email       String        @unique
+  password    String
+  Cards       Cards[]
+  Credentials Credentials[]
+  Notes       Notes[]
+  Sessions    Sessions[]
+  Wifi        Wifi[]
 }
 
-model credentials {
+model Sessions {
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  created_at DateTime  @default(now())
+  deleted_at DateTime?
+  token      String
+  user       Users     @relation(fields: [userId], references: [id])
+}
+
+model Credentials {
   id        Int    @id @default(autoincrement())
   title     String
   url       String
   userLogin String
   password  String
+  userId    Int
+  user      Users  @relation(fields: [userId], references: [id])
+}
+
+model Notes {
+  id     Int    @id @default(autoincrement())
+  title  String
+  note   String
+  userId Int
+  user   Users  @relation(fields: [userId], references: [id])
+}
+
+model Cards {
+  id              Int     @id @default(autoincrement())
+  title           String
+  number          Int
+  holdername      String
+  cvv             Int
+  expiration_date String
+  password        String
+  is_virtual      Boolean
+  userId          Int
+  user            Users   @relation(fields: [userId], references: [id])
+}
+
+model Wifi {
+  id       Int    @id @default(autoincrement())
+  title    String
+  name     String
+  password String
+  userId   Int
+  user     Users  @relation(fields: [userId], references: [id])
 }
