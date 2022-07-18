@@ -1,4 +1,4 @@
-import * as filesRepository from "../repositories/filesRepository.js";
+import * as filesRepository from "../repositories/wifiRepositories.js";
 import { newTitle } from "../utils/verificateTitleUtil.js";
 
 export async function newTitleWifi(userId: number, title: string) {

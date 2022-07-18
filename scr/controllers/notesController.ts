@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as filesRepository from "../repositories/filesRepository.js";
+import * as filesRepository from "../repositories/notesRepositories.js";
 import { deletedNote, findNote, newTitleNote } from "../services/NotesServices.js";
 
 export async function insertNote(req: Request, res: Response) {
@@ -39,4 +39,5 @@ export async function deletedNotesId(req: Request, res: Response) {
     const tableId = req.params.id;
 
     await deletedNote(parseInt(tableId), userId);
+    res.status(200).send({message: "NotesPass deleted successfully"});   
 }

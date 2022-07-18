@@ -1,4 +1,4 @@
-import * as filesRepository from "../repositories/filesRepository.js";
+import * as filesRepository from "../repositories/notesRepositories.js";
 import { newTitle } from "../utils/verificateTitleUtil.js";
 
 export async function newTitleNote(userId: number, title: string) {

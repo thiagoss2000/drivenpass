@@ -18,7 +18,8 @@ export async function signUp(req: Request, res: Response) {
   const hashPassword = bcrypt.hashSync(password,10);
 
   const userData = await searchUser(email);
-
+  
+  console.log(userData)
   if (userData) throw {status: 409, message: "user exists"};
   
   await newUser({ email, password: hashPassword });
@@ -35,7 +36,7 @@ export async function signIn (req: Request, res: Response){
     throw {status: 401, message: "invalid data"};      
     
   const data = { id: verifyUser.id }
-  const config = { expiresIn: "1m" };
+  const config = { expiresIn: "1h" };
   const token= jwt.sign(data ,process.env.ENCRYPTPASSWORD, config);
 
   await insertToken(verifyUser.id, token);

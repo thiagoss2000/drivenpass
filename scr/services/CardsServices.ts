@@ -1,4 +1,5 @@
-import * as filesRepository from "../repositories/filesRepository.js";
+import Cryptr from "cryptr";
+import * as filesRepository from "../repositories/cardsRepositories.js";
 import { newTitle } from "../utils/verificateTitleUtil.js";
 
 export async function newTitleCard(userId: number, title: string) {
@@ -20,5 +21,16 @@ export async function findCard(tableId: number, userId: number) {
 
     if (dataDb.userId !== userId) throw {status: 401, message: "invalid data"};      
 
-    return dataDb;
+    const cryptr = new Cryptr(dataDb.number.toString());
+
+    return {
+        id: dataDb.id,
+        title: dataDb.title, 
+        number: dataDb.number, 
+        holdername: dataDb.holdername, 
+        cvv: cryptr.decrypt(dataDb.cvv), 
+        expiration_date: dataDb.expiration_date, 
+        password: cryptr.decrypt(dataDb.password), 
+        virtual: dataDb.virtual 
+    };
 }

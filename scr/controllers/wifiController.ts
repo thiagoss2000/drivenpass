@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as filesRepository from "../repositories/filesRepository.js";
+import * as filesRepository from "../repositories/wifiRepositories.js";
 import { deletedWifi, findWifi, newTitleWifi } from "../services/WifiServices.js";
 
 export async function insertWifi(req: Request, res: Response) {
@@ -39,4 +39,5 @@ export async function deletedWifisId(req: Request, res: Response) {
     const tableId = req.params.id;
 
     await deletedWifi(parseInt(tableId), userId);
+    res.status(200).send({message: "WifiPass deleted successfully"});   
 }

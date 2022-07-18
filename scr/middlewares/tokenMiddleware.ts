@@ -10,7 +10,7 @@ export async function validateToken (req: Request, res: Response, next: NextFunc
     if (!authorization) return res.status(401).send("Token not provided");
 
     const token = authorization.replace("Bearer ", "");
-        
+   
     const validateToken= jwt.verify(token, process.env.ENCRYPTPASSWORD);
     res.locals.user= validateToken
     next();  

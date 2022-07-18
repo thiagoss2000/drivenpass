@@ -14,7 +14,7 @@ export const newNote = joi.object({
 
 export const newCard = joi.object({
   title: joi.string().max(50).required(),
-  number: joi.number().required(),
+  number: joi.number().unsafe().required(),
   holdername: joi.string().required(),
   cvv: joi.number().required(),
   expiration_date: joi.string().required(),

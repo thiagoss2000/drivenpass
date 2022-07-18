@@ -52,9 +52,9 @@ model Notes {
 model Cards {
   id              Int     @id @default(autoincrement())
   title           String
-  number          Int
+  number          Float
   holdername      String
-  cvv             Int
+  cvv             String
   expiration_date String
   password        String
   is_virtual      Boolean

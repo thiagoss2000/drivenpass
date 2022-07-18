@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import * as filesRepository from "../repositories/filesRepository.js";
+import * as filesRepository from "../repositories/credentialsRepository.js";
 import { deletedCredential, findCredential, newTitleCredential } from "../services/CredentialsServices.js";
 
 export async function insertCredential(req: Request, res: Response) {
     const { title, url, user, password }: filesRepository.Credentials = req.body;
     const userId : number = res.locals.user.id;
-
+    
     const virificatedTitle = await newTitleCredential(userId, title);
 
     const data = { title: virificatedTitle, url, user, password };
@@ -39,4 +39,5 @@ export async function deletedCredentialsId(req: Request, res: Response) {
     const tableId = req.params.id;
 
     await deletedCredential(parseInt(tableId), userId);
+    res.status(200).send({message: "CredentialPass deleted successfully"});   
 }
