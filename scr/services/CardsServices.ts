@@ -31,6 +31,6 @@ export async function findCard(tableId: number, userId: number) {
         cvv: cryptr.decrypt(dataDb.cvv), 
         expiration_date: dataDb.expiration_date, 
         password: cryptr.decrypt(dataDb.password), 
-        virtual: dataDb.virtual 
+        virtual: dataDb.is_virtual 
     };
 }
